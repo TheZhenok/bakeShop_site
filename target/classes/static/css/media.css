@@ -1,0 +1,268 @@
+@media (max-width: 768px) {
+    .flex {
+        justify-content: center;
+    }
+    .container {
+        max-width: 768px;
+    }
+
+    .header {
+        width: 768px;
+        height: 400px;
+        background-size: 44%;
+    }
+
+    .header__image {
+        display: none;
+    }
+
+    .header__nav {
+        margin: 0 auto;
+        width: 700px;
+        display: flex;
+        justify-content: space-between;
+        height: 36px;
+        padding-top: 40px;
+    }
+
+    .header__info {
+        width: 300px;
+        height: 275px;
+        margin-top: 50px;
+    }
+
+    .header__heading {
+        font-size: 32px;
+        width: 250px;
+        line-height: 40px;
+        height: auto;
+    }
+
+    .header__text {
+        font-size: 12px;
+        line-height: 17px;
+        width: 250px;
+    }
+
+    .header__info_bottom {
+        width: 250px;
+        height: 80px;
+    }
+
+    .header__info__button {
+        width: 150px;
+        min-width: 130px;
+    }
+
+    .header__info__button_previous {
+        font-size: 12px;
+        line-height: 15px;
+    }
+
+    .header__info__button_previous_arrow {
+        width: 15px;
+    }
+
+    .header__info__button_text {
+        font-size: 15px;
+        line-height: 20px;
+        margin-top: 6px;
+    }
+
+    .header__info__button_next {
+        font-size: 12px;
+        line-height: 15px;
+    }
+
+    .header__info__button_next_arrow {
+        width: 15px;
+    }
+
+    .service {
+        flex-wrap: wrap;
+        justify-content: center;
+        height: 310px;
+        transform: scale(1.2);
+        margin-top: 70px;
+    }
+
+    .priceList__top {
+
+        justify-content: center;
+        gap: 348px;
+    }
+
+    .none_768 {
+        display: none;
+    }
+
+    .article {
+        justify-content: center;
+        margin-top: 80px;
+    }
+
+    .VisitShop {
+        background-image: none;
+    }
+
+
+    .footer {
+        height: 500px;
+    }
+
+    .footer__info {
+        gap: 40px;
+        flex-direction: column;
+        margin-top: 30px;
+        transform: scale(1.2);
+        align-items: center;
+    }
+
+    .footer__address {
+        text-align: center;
+    }
+
+    .footer__address__heading {
+        margin-top: 10px;
+    }
+
+    .footer__names {
+        text-align: center;
+        line-height: 5px;
+    }
+
+    .footer__names__text {
+        line-height: 1.5em;
+    }
+
+    .footer__form {
+        text-align: center;
+
+    }
+}
+
+@media (max-width: 376px) {
+    .container {
+        max-width: 376px;
+    }
+
+    .header {
+        width: 376px;
+        height: 400px;
+        background-image: none;
+        margin-bottom: 100px;
+    }
+
+    .header__nav {
+        width: 360px;
+        justify-content: space-between;
+    }
+
+    .header__nav__search {
+        display: none;
+    }
+
+    .header__nav__shopCart {
+        display: none;
+    }
+
+    .header__nav__signUp {
+        width: 70px;
+    }
+
+    .header__nav__signIn {
+        width: 70px;
+    }
+
+    .header__info {
+        height: 300px;
+        margin-top: 40px;
+    }
+
+    .header__heading {
+
+        text-align: center;
+    }
+
+    .header__text {
+        font-size: 14px;
+        line-height: 19px;
+        width: 250px;
+        text-align: center;
+    }
+
+    .service {
+        height: 660px;
+    }
+
+    .priceList {
+        height: 950px;
+    }
+
+    .priceList__top {
+        gap: 33px;
+    }
+
+    .priceList__bottom {
+        gap: 20px;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 24px;
+    }
+
+    .article {
+        margin-top: 30px;
+    }
+
+    .article__left {
+        margin-top: 30px;
+        width: 376px;
+    }
+
+    .article__heading {
+        width: 300px;
+        font-size: 30px;
+        line-height: 35px;
+        margin: 0 auto;
+    }
+
+    .article__info {
+        width: 300px;
+        font-size: 14px;
+        line-height: 28px;
+        margin: 0 auto;
+        margin-bottom: 10px;
+        height: auto;
+    }
+
+    .VisitShop__heading {
+        width: 300px;
+        height: auto;
+        font-size: 30px;
+        line-height: 36px;
+        margin: 0 auto;
+        margin-top: 30px;
+    }
+
+    .VisitShop__button {
+        margin: 0 auto;
+        margin-top: 20px;
+
+    }
+
+    .VisitShop {
+        height: 220px;
+        margin-top: 30px;
+    }
+
+    .footer {
+        margin-top: 40px;
+    }
+
+    .width_376 {
+        width: 376px;
+    }
+}
+
+/*# sourceMappingURL=media.css.map */
