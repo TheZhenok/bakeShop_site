@@ -21,7 +21,7 @@
                     <br><br> Login: <span th:text="${user.getUsername()}"></span> <br> Role: <span th:text="${user.getRoles()}"></span>
                 </div>
                 <a class="edit" th:href="@{admin/{id}(id = ${user.getId()})}">Edit</a>
-                <a class="delete">Delete</a>
+                <a class="delete" th:href="@{admin/delete/{id}(id = ${user.getId()})}">Delete</a>
             </div>
         </div>
     </main>

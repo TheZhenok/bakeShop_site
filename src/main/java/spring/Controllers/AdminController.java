@@ -38,8 +38,17 @@ public class AdminController {
     public String currentUser(@PathVariable("id") Long id,
                               Model model){
         Optional<User> user = userRepos.findById(id);
-        
+
         System.out.println(user.get().getUsername());
         return "/current_user";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteUser(@PathVariable("Id") Long id){
+        Optional<User> user = userRepos.findById(id);
+        if(user.get() != null){
+            userRepos.delete(user.get());
+        }
+        return "redirect: admin";
     }
 }
