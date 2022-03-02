@@ -29,7 +29,9 @@
   /* background-image: url(../img/header_img2.jpg);
   background-repeat: no-repeat; */
 }
-
+.no__main{
+  height: 140px;
+}
 .header__nav {
   margin: 0 auto;
   width: 1168px;
@@ -604,4 +606,22 @@ padding-left: 13px;
   color: #DA7110;
   border: 1px solid #DA7110;
   
+}
+
+.search__title {
+  font-size: 40px;
+  transform: translate(10%, 0);
+}
+
+.search__content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 40px;
+  height: auto;
+}
+
+.no__height {
+  height: auto;
+  width: 70%;
 }

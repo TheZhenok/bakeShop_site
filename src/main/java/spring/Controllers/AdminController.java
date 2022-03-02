@@ -1,11 +1,14 @@
 package spring.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import spring.Models.Product;
 import spring.Models.Role;
 import spring.Models.User;
 import spring.Repos.UserRepos;
@@ -18,11 +21,17 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    @Autowired
-    private UserRepos userRepos;
+    @Value("${upload.path.product}")
+    private String productIconPath;
 
-    @Autowired
-    private UserService userService;
+    private final UserRepos userRepos;
+
+    private final UserService userService;
+
+    public AdminController(UserRepos userRepos, UserService userService) {
+        this.userRepos = userRepos;
+        this.userService = userService;
+    }
 
 
     @GetMapping()
@@ -50,5 +59,17 @@ public class AdminController {
             userRepos.delete(user.get());
         }
         return "redirect: admin";
+    }
+
+    @GetMapping("/product/add")
+    public String addProductPage(Model model){
+        model.addAttribute("user", new User());
+        model.addAttribute("product", new Product());
+        return "product-add";
+    }
+
+    @PostMapping("addProduct")
+    public String addProduct(){
+        return "product-add";
     }
 }

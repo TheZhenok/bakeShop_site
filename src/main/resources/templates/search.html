@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="shortcut icon" href="img/favicon.ico"/>
+  <link rel="bookmark" href="img/favicon.ico"/>
+  <link rel="stylesheet" href="/css/media.css">
+  <link rel="stylesheet" href="/css/user.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Nunito:wght@700&family=Poppins:wght@500&family=Source+Sans+Pro:wght@200&family=Work+Sans:wght@400;500&display=swap"
+          rel="stylesheet">
+</head>
+
+<body style="overflow-x: hidden;">
+<header class="header container no__main">
+  <nav class="header__nav">
+    <div class="header__nav_left">
+      <a class="header__nav__main" href="javascript:history.back()">
+        <img src="img/logo.png" alt="logo">
+      </a>
+    </div>
+    <div class="header__nav_right">
+      <form action="search" class="header__nav__search" method="post">
+        <input type="text" class="header__nav__search__input" name="searchContent"/>
+        <button type="submit" class="header__nav__search__btn" href="#"/>
+        <img src="img/search.png" alt="search">
+        </button>
+      </form>
+      <a class="header__nav__shopCart" href="#">
+        <img src="img/shopCart.png" alt="shopCart">
+      </a>
+      <a class="header__nav__signUp" href="#">
+        Регистрация
+      </a>
+      <a class="header__nav__signIn" href="#">
+        Вход
+      </a>
+    </div>
+  </nav>
+</header>
+
+<p class="search__title"><b>Результаты поиска: </b><i th:text="${searchContent}"></i></p>
+<main class="priceList container no__height">
+  <div class="priceList__bottom search__content">
+
+    <a href="#" th:each="product : ${products}">
+      <figure class="priceList__card">
+        <img src="../img/furncace1.jpg" alt="plant">
+        <figcaption class="priceList__card__plantName" th:text="${product.getName()}">
+          "Куппер" ОК-15 2.0
+        </figcaption>
+        <figcaption class="priceList__card__price" th:text="${product.getPrice()}">
+          261 700 KZT
+        </figcaption>
+      </figure>
+    </a>
+
+
+  </div>
+  <p class="search__title" th:if="${isEmpty}">По вашему запросу ничего не найдено</p>
+</main>
+
+
+<div class="register">
+  <div class="register__controller">
+    <div class="register__close__area"></div>
+    <div class="register__content">
+      <div class="register__title">
+        <h1 >Регистрация</h1>
+      </div>
+      <form action="register" class="register__form" method="post" th:object="${user}">
+        <div class="register__name">
+          <div class="label__and__iuput">
+            <label for="name">Имя</label>
+            <input type="text" class="register__input"
+                   th:classappend="${#fields.hasErrors('name')} ? error__input : ''"
+                   name="name" id="name" th:placeholder="${name}" th:field="*{name}">
+          </div>
+          <div class="label__and__iuput">
+            <label for="lastname">Фамилия</label>
+            <input type="text" class="register__input"
+                   th:classappend="${#fields.hasErrors('lastname')} ? error__input : ''"
+                   name="lastname" id="lastname" th:field="*{lastname}">
+          </div>
+          <div class="label__and__iuput">
+            <label for="fathername">Отчество</label>
+            <input type="text" class="register__input"
+                   th:classappend="${#fields.hasErrors('fathername')} ? error__input : ''"
+                   name="fathername" id="fathername" th:field="*{fathername}">
+          </div>
+        </div>
+        <div class="error__name">
+          <div class="error__text" th:errors="*{name}"></div>
+          <div class="error__text" th:errors="*{lastname}"></div>
+          <div class="error__text" th:errors="*{fathername}"></div>
+        </div>
+
+        <div class="label__and__iuput">
+          <label for="username">Логин</label>
+          <input type="text" class="register__input" name="username"
+                 th:classappend="${#fields.hasErrors('username')} ? error__input : ''"
+                 id="username" th:field="*{username}">
+        </div>
+        <div class="error__text" th:errors="*{username}"></div>
+
+        <div class="label__and__iuput">
+          <label for="password">Пароль</label>
+          <input type="password" class="register__input" name="password"
+                 th:classappend="${#fields.hasErrors('password')} ? error__input : ''"
+                 id="password" th:field="*{password}">
+        </div>
+        <div class="error__text" th:errors="*{password}"></div>
+
+        <div class="label__and__iuput">
+          <label for="repeatPassword">Пвторите пароль</label>
+          <input type="password" class="register__input"
+                 th:classappend="${isFalsePassword} ? error__input : ''"
+                 name="repeatPassword" id="repeatPassword" th:field="*{repeatPassword}">
+        </div>
+        <div class="error__text" th:if="${isFalsePassword}" th:text="${errorRepeatPassword}"></div>
+
+        <input type="submit" value="Регистрация" class="register__submit">
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="register" id="log">
+  <div class="login__controller">
+    <div class="register__close__area" id="close__login"></div>
+    <div class="login__content">
+      <div class="register__title">
+        <h1 >Авторизация</h1>
+      </div>
+      <form action="login" class="register__form">
+        <div class="label__and__iuput">
+          <label for="username">Логин</label><input type="text" class="register__input" name="username"
+                                                    id="username">
+        </div>
+
+        <div class="label__and__iuput">
+          <label for="password">Пароль</label><input type="password" class="register__input" name="password"
+                                                     id="password">
+        </div>
+
+        <input type="submit" value="Авторизация" class="register__submit">
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+<footer class="footer">
+  <div class="footer__info">
+    <div class="footer__address">
+      <h2 class="footer__address__mainHeading">
+        plantku
+      </h2>
+      <h3 class="footer__address__heading">
+        Planktu House
+      </h3>
+      <p class="footer__address__text">
+        Jl. Laksda Adisucipto No.51, Demangan, Kec.
+        Depok, Kota Yogyakarta, Daerah Istimewa
+        Yogyakarta 55282
+      </p>
+
+    </div>
+
+    <div class="footer__names__wrapper">
+      <div class="footer__names">
+        <h3 class="footer__names__heading">
+          Perusahaan
+        </h3>
+        <p class="footer__names__text">
+          Tentang Kami
+          Hubungi Kami
+        </p>
+      </div>
+      <div class="footer__names">
+        <h3 class="footer__names__heading">
+          Produk
+        </h3>
+        <p class="footer__names__text">
+          Tanaman
+          Tanaman Lain
+        </p>
+      </div>
+    </div>
+
+    <form class="footer__form" action="#">
+      <label class="footer__form__label" for="mail">
+        Berlangganan Email Kami
+      </label>
+      <input class="footer__form__input" id="mail" type="text" placeholder="Masukan Alamat Email">
+      <input class="footer__form__button" type="submit" value="Submit">
+
+    </form>
+
+  </div>
+
+</footer>
+<script src="/js/register__and__login.js"></script>
+</body>
+
+</html>

@@ -5,29 +5,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import spring.Models.Product;
 import spring.Models.Role;
 import spring.Models.User;
+import spring.Repos.ProductRepos;
 import spring.Repos.UserRepos;
 import spring.Service.UserService;
 
 import javax.validation.Valid;
-import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 @Controller
 public class MainController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private UserRepos userRepos;
+    private final UserRepos userRepos;
+
+    private final ProductRepos productRepos;
+
+    public MainController(UserService userService, UserRepos userRepos, ProductRepos productRepos) {
+        this.userService = userService;
+        this.userRepos = userRepos;
+        this.productRepos = productRepos;
+    }
 
     @GetMapping()
     public String mainPage(Model model){
@@ -70,13 +75,6 @@ public class MainController {
     }
 
 
-    @PostMapping("search")
-    public String search(Model model,
-                         @ModelAttribute("searchContent") String searchContent){
-        return "index";
-    }
-
-
     @GetMapping("/genertion_users")
     public String generationUsers(){
         final int MAX_GENERATION_VALUE = 100;
@@ -102,6 +100,28 @@ public class MainController {
             userRepos.save(user);
         }
         return "Generation is successful";
+    }
+
+    @PostMapping("search")
+    public String searchProduct(
+            @RequestParam("searchContent") String searchContent,
+            Model model){
+        List<Product> products = new ArrayList<Product>();
+        System.out.println(searchContent);
+        model.addAttribute("user", new User());
+        for (Product product : productRepos.findAll()) {
+            if(product.getName().contains(searchContent)){
+                products.add(product);
+            }
+        }
+        if(products.isEmpty()){
+            model.addAttribute("isEmpty", true);
+        }else {
+            model.addAttribute("isEmpty", false);
+        }
+        model.addAttribute("productsSearch", products);
+        model.addAttribute("searchContent", searchContent);
+        return "search";
     }
 
 

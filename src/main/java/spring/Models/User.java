@@ -38,6 +38,7 @@ public class User implements UserDetails {
     private String repeatPassword;
     private int pay;
     private boolean active;
+    private String avatar;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
@@ -52,6 +53,19 @@ public class User implements UserDetails {
         return roles;
     }
 
+    public User(String name, String lastname, String fathername, String username, String password, String repeatPassword, int pay, boolean active, String avatar, Set<Role> roles) {
+        this.name = name;
+        this.lastname = lastname;
+        this.fathername = fathername;
+        this.username = username;
+        this.password = password;
+        this.repeatPassword = repeatPassword;
+        this.pay = pay;
+        this.active = active;
+        this.avatar = avatar;
+        this.roles = roles;
+    }
+
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
@@ -62,23 +76,6 @@ public class User implements UserDetails {
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public User(String name,
-                String lastname,
-                String fathername,
-                String username,
-                String password,
-                String repeatPassword,
-                int pay, Set<Role> roles) {
-        this.name = name;
-        this.lastname = lastname;
-        this.fathername = fathername;
-        this.username = username;
-        this.password = password;
-        this.repeatPassword = repeatPassword;
-        this.pay = pay;
-        this.roles = roles;
     }
 
     public User() {
@@ -173,5 +170,13 @@ public class User implements UserDetails {
 
     public boolean isActive(){
         return active;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
