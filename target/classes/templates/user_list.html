@@ -9,23 +9,69 @@
     <link rel="stylesheet" href="css/admin.css">
     <link rel="shortcut icon" href="img/favicon.ico"/>
     <link rel="bookmark" href="img/favicon.ico"/>
+    <link rel="stylesheet" href="css/product.css" />
 </head>
 <body>
-    <header></header>
-    <main>
-        <div class="user__list">
-            <div class="user__info" th:each="user : ${users}">
-                <h1 th:text="${user.getRoles().contains(isAdmin) ? 'ADMIN' : 'USER'}">USER</h1>
-                <div class="info">
-                    <span th:text="${user.getName()}" style="color: darkgreen"></span>
-                    <span th:text="${user.getLastname()}" style="color: darkgreen"></span>
-                    <span th:text="${user.getFathername()}" style="color: darkgreen;"></span>
-                    <br><br> Login: <span th:text="${user.getUsername()}"></span> <br> Role: <span th:text="${user.getRoles()}"></span>
-                </div>
-                <a class="edit" th:href="@{admin/{id}(id = ${user.getId()})}">Edit</a>
-                <a class="delete" th:href="@{admin/delete/{id}(id = ${user.getId()})}">Delete</a>
+<header class="admin__header">
+    <div class="color__btn"></div>
+    <nav class="nav__admin">
+        <button class="link__admin">Пользователи</button>
+        <button class="link__admin">Котлы</button>
+    </nav>
+</header>
+<main id="user__admin">
+    <div class="user__list">
+        <div class="user__info" th:each="user : ${users}">
+            <h1 th:text="${user.getRoles().contains(isAdmin) ? 'ADMIN' : 'USER'}">USER</h1>
+            <div class="info">
+                <span th:text="${user.getName()}" style="color: darkgreen"></span>
+                <span th:text="${user.getLastname()}" style="color: darkgreen"></span>
+                <span th:text="${user.getFathername()}" style="color: darkgreen;"></span>
+                <br><br> Login: <span th:text="${user.getUsername()}"></span> <br> Role: <span
+                    th:text="${user.getRoles()}"></span>
             </div>
+            <a class="edit" th:href="@{admin/{id}(id = ${user.getId()})}">Edit</a>
+            <a class="delete" th:href="@{admin/delete/{id}(id = ${user.getId()})}">Delete</a>
         </div>
-    </main>
+    </div>
+</main>
+
+<main id="product__admin">
+    <div class="control__main">
+        <form enctype="multipart/form-data" method="post" action="/admin/addProduct" class="app__panel" th:object="${product}">
+            <div class="form-left-decoration"></div>
+            <div class="circle"></div>
+            <div class="form-inner">
+                <h3>Добавить печь</h3>
+                <input type="text" placeholder="Название печи" name="name" th:field="*{name}"/>
+                <input type="text" placeholder="Цена" name="priceValue" th:field="*{priceValue}"/>
+                <textarea placeholder="Описание..." rows="3" name="description" th:field="*{description}"></textarea>
+
+                <label for="myfile" class="chous">Изображение печи</label>
+                <input
+                        type="file"
+                        class="my"
+                        id="myfile"
+                        name="myfile"
+                />
+
+                <input class="in__sumbit" type="submit" value="Отправить"/>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script src="./js/jquery-3.6.0.min.js"></script>
+<script>
+    $(".my").change(function (e) {
+        var fileName = e.target.files[0].name;
+        if ($(this).val() != "")
+            $(this)
+                .prev()
+                .text("Выбран файл: " + fileName);
+        else $(this).prev().text("Выберите файл");
+    });
+</script>
+<script src="js/admin.js"></script>
 </body>
 </html>

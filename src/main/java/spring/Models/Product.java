@@ -16,6 +16,23 @@ public class Product {
     private String name;
     private Money price;
     private BigDecimal priceValue;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getIcoPath() {
+        return icoPath;
+    }
+
+    public void setIcoPath(String icoPath) {
+        this.icoPath = icoPath;
+    }
 
     @CollectionTable(name = "product_image", joinColumns = @JoinColumn(name = "product_id"))
     private String icoPath;

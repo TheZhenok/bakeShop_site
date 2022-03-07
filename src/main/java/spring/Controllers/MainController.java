@@ -114,11 +114,8 @@ public class MainController {
                 products.add(product);
             }
         }
-        if(products.isEmpty()){
-            model.addAttribute("isEmpty", true);
-        }else {
-            model.addAttribute("isEmpty", false);
-        }
+
+        model.addAttribute("isEmpty", products.isEmpty());
         model.addAttribute("productsSearch", products);
         model.addAttribute("searchContent", searchContent);
         return "search";
