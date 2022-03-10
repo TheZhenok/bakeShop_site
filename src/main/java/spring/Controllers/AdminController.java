@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import spring.Models.Product;
 import spring.Models.Role;
 import spring.Models.User;
+import spring.Repos.ProductRepos;
 import spring.Repos.UserRepos;
 import spring.Service.UserService;
 
@@ -29,6 +30,9 @@ public class AdminController {
     private final UserRepos userRepos;
 
     private final UserService userService;
+
+    @Autowired
+    private ProductRepos productRepos;
 
     public AdminController(UserRepos userRepos, UserService userService) {
         this.userRepos = userRepos;
@@ -80,7 +84,7 @@ public class AdminController {
             file.transferTo(new File(productIconPath + "/" + resultFileName));
             product.setIcoPath(resultFileName);
         }
-
+        productRepos.save(product);
         System.out.println(product.getPriceValue());
         System.out.println(product.getIcoPath());
         System.out.println("PRODUCT ADD");

@@ -114,7 +114,7 @@ public class MainController {
                 products.add(product);
             }
         }
-
+        System.out.println(products.get(0));
         model.addAttribute("isEmpty", products.isEmpty());
         model.addAttribute("productsSearch", products);
         model.addAttribute("searchContent", searchContent);
