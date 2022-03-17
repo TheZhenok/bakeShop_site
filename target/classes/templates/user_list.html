@@ -15,14 +15,16 @@
 <header class="admin__header">
     <div class="color__btn"></div>
     <nav class="nav__admin">
-        <button class="link__admin">Пользователи</button>
         <button class="link__admin">Котлы</button>
+        <button class="link__admin">Пользователи</button>
+        <button class="link__admin">Добавить Пользователя</button>
+        <button class="link__admin">Добавить Котлёл</button>
     </nav>
 </header>
 <main id="user__admin">
     <div class="user__list">
         <div class="user__info" th:each="user : ${users}">
-            <h1 th:text="${user.getRoles().contains(isAdmin) ? 'ADMIN' : 'USER'}">USER</h1>
+            <h1 th:text="${user.getRoles().contains(isAdmin) ? 'ADMIN' : 'USER'}" th:style="${user.isAdmin()} ? 'color: gold' : ''">USER</h1>
             <div class="info">
                 <span th:text="${user.getName()}" style="color: darkgreen"></span>
                 <span th:text="${user.getLastname()}" style="color: darkgreen"></span>
@@ -36,7 +38,7 @@
     </div>
 </main>
 
-<main id="product__admin">
+<main id="product__add__admin">
     <div class="control__main">
         <form enctype="multipart/form-data" method="post" action="/admin/addProduct" class="app__panel" th:object="${product}">
             <div class="form-left-decoration"></div>
@@ -44,7 +46,10 @@
             <div class="form-inner">
                 <h3>Добавить печь</h3>
                 <input type="text" placeholder="Название печи" name="name" th:field="*{name}"/>
-                <input type="text" placeholder="Цена" name="priceValue" th:field="*{priceValue}"/>
+                <div style="display: flex; align-items: center; gap: 8px">
+                    <input type="text" placeholder="Цена" name="priceValue" th:field="*{priceValue}"/>
+                    <b style="font-size: 20px; color: white">KZT</b>
+                </div>
                 <textarea placeholder="Описание..." rows="3" name="description" th:field="*{description}"></textarea>
 
                 <label for="myfile" class="chous">Изображение печи</label>
@@ -58,6 +63,29 @@
                 <input class="in__sumbit" type="submit" value="Отправить"/>
             </div>
         </form>
+    </div>
+</main>
+<main id="user__add__admin"></main>
+<main id="product__admin">
+    <div class="product__list">
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Имя</th>
+                <th>Цена</th>
+                <th>Описание</th>
+                <th>Удалить</th>
+            </tr>
+            <tbody id="products">
+                <tr th:each="oneProduct : ${allProducts}">
+                    <td th:text="${oneProduct.getId()}"></td>
+                    <td><a th:href="@{admin/product/{id}(id = ${oneProduct.getId()})}" th:text="${oneProduct.getName()}" class="product__link"></a></td>
+                    <td th:text="${oneProduct.getPriceValue()}"></td>
+                    <td th:text="${oneProduct.getDescription()}"></td>
+                    <td><a th:href="@{admin/product/delete/{id}(id = ${oneProduct.getId()})}" class="product__link__delete">X</a></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </main>
 

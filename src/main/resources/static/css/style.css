@@ -135,6 +135,27 @@
   color: #ffffff;
   background-color: #DA7110;
 }
+.header__nav__signOut {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 111px;
+  height: 36px;
+  font-family: Nunito;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  background: none;
+  border: none;
+  color: #DA7110;
+  transition: 0.5s;
+}
+
+.header__nav__signOut:hover {
+  color: #ffffff;
+  background-color: #DA7110;
+}
+
 
 .header__nav__signIn {
   display: flex;

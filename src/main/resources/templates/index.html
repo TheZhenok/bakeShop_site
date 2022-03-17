@@ -21,7 +21,7 @@
 </head>
 
 <body>
-    <header class="header container">
+    <header class="header container" >
         <nav class="header__nav">
             <div class="header__nav_left">
                 <a class="header__nav__main" href="">
@@ -38,12 +38,23 @@
                 <a class="header__nav__shopCart" href="#">
                     <img src="img/shopCart.png" alt="shopCart">
                 </a>
-                <a class="header__nav__signUp" href="#">
-                    Регистрация
-                </a>
-                <a class="header__nav__signIn" href="#">
-                    Вход
-                </a>
+                <div th:if="${!signOut}" style="display: flex">
+                    <a class="header__nav__signUp" href="#">
+                        Регистрация
+                    </a>
+                    <a class="header__nav__signIn" href="#">
+                        Вход
+                    </a>
+                </div>
+                <div th:if="${isAdmin}">
+                    <a href="/admin" class="header__nav__signOut">Admin</a>
+                </div>
+                <div th:if="${signOut}" style="display: flex">
+                    <a class="header__nav__signOut" th:text="${activeUser}" href="/profile/"></a>
+                    <form th:action="@{/logout}" method="post">
+                        <button class="header__nav__signOut" type="submit">Выйти</button>
+                    </form>
+                </div>
             </div>
         </nav>
         <div class="flex">
@@ -371,7 +382,7 @@
                 <div class="register__title">
                     <h1 >Авторизация</h1>
                 </div>
-                <form action="login" class="register__form">
+                <form th:action="@{/login}" method="post" class="register__form">
                     <div class="label__and__iuput">
                         <label for="username">Логин</label><input type="text" class="register__input" name="username"
                             id="username">

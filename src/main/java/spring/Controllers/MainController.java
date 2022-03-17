@@ -2,6 +2,7 @@ package spring.Controllers;
 
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,13 +15,14 @@ import spring.Repos.UserRepos;
 import spring.Service.UserService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.security.Principal;
+import java.util.*;
 
 @Controller
 public class MainController {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private final UserService userService;
 
@@ -55,10 +57,6 @@ public class MainController {
     public String registerUser(Model model,
                                @Valid @ModelAttribute("user")User user,
                                BindingResult bindingResult){
-        User userThe = userRepos.findByUsername("TheZhenok");
-        if(userThe != null) {
-            System.out.println(userThe.getName());
-        }
         if (!user.equalsUser()){
             model.addAttribute("isFalsePassword", true);
             model.addAttribute("errorRepeatPassword", "Пароли не совпадают");
@@ -67,9 +65,7 @@ public class MainController {
         if(bindingResult.hasErrors()){
             return "index";
         }
-        user.setActive(true);
-        user.setRoles(Collections.singleton(Role.USER));
-        userRepos.save(user);
+        userService.addNewUser(user);
         model.addAttribute("userName", user.getName());
         return "accept_register";
     }
@@ -101,24 +97,36 @@ public class MainController {
         }
         return "Generation is successful";
     }
+    @GetMapping("/search")
+    public String searchGetProduct(Model model){
+        Iterable<Product> products = productRepos.findAll();
+        model.addAttribute("productsSearch", products);
+        return "search";
+    }
 
     @PostMapping("search")
     public String searchProduct(
             @RequestParam("searchContent") String searchContent,
-            Model model){
+            Map<String, Object> model){
         List<Product> products = new ArrayList<Product>();
         System.out.println(searchContent);
-        model.addAttribute("user", new User());
+        model.put("user", new User());
         for (Product product : productRepos.findAll()) {
             if(product.getName().contains(searchContent)){
                 products.add(product);
+                System.out.println(product.getIcoPath());
             }
         }
-        System.out.println(products.get(0));
-        model.addAttribute("isEmpty", products.isEmpty());
-        model.addAttribute("productsSearch", products);
-        model.addAttribute("searchContent", searchContent);
+        model.put("productsSearch", products);
+        model.put("searchContent", searchContent);
         return "search";
+    }
+
+    @GetMapping("/profile")
+    public String profile(Principal principal, Model model){
+        User user = userRepos.findByUsername(principal.getName());
+        model.addAttribute("user", user);
+        return "current_user";
     }
 
 

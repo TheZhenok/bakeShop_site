@@ -1,5 +1,7 @@
 package spring.Controllers;
 
+import netscape.javascript.JSObject;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -42,14 +44,15 @@ public class AdminController {
 
     @GetMapping()
     public String adminMain(Model model, Principal principal){
+        List<Product> allProducts = productRepos.findAll();
         List<User> users = userRepos.findAll();
         model.addAttribute("user", new User());
         model.addAttribute("product", new Product());
+        model.addAttribute("allProducts", allProducts);
         model.addAttribute("isAdmin", Role.ADMIN);
         model.addAttribute("users", users);
         return "user_list";
     }
-
 
     @GetMapping("/{id}")
     public String currentUser(@PathVariable("id") Long id,
@@ -57,16 +60,20 @@ public class AdminController {
         Optional<User> user = userRepos.findById(id);
 
         System.out.println(user.get().getUsername());
-        return "/current_user";
+        model.addAttribute("user", user.get());
+        return "current_user";
     }
-
+    @GetMapping("product/delete/{id}")
+    public String deleteProduct(@PathVariable("id") Long id){
+        Optional<Product> product = productRepos.findById(id);
+        productRepos.delete(product.get());
+        return "redirect:/admin";
+    }
     @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("Id") Long id){
+    public String deleteUser(@PathVariable("id") Long id){
         Optional<User> user = userRepos.findById(id);
-        if(user.get() != null){
-            userRepos.delete(user.get());
-        }
-        return "redirect: /admin";
+        userRepos.delete(user.get());
+        return "redirect:/admin";
     }
 
     @PostMapping("/addProduct")
