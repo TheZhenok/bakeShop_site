@@ -13,25 +13,68 @@
 </head>
 
 <body>
-    <header class="header">
-        <div class="header__avatar"></div>
-    </header>
-    <main>
+<header class="header">
+    <div class="header__avatar"></div>
+</header>
+<main id="first">
+    <div class="basic__info">
+        <h2 style="margin-bottom: 15px;">Basic information</h2>
+        <div class="user__name basic__info__block">
+            <h3>Имя</h3>
+            <h3 id="firstname" th:text="${user.getName()}">...</h3>
+        </div>
+
+        <div class="user__name basic__info__block">
+            <h3>Фамилия</h3>
+            <h3 id="lastname" th:text="${user.getLastname()}">...</h3>
+        </div>
+
+        <div class="user__name basic__info__block">
+            <h3>Имя пользователя</h3>
+            <h3 id="username" th:text="${user.getUsername()}">...</h3>
+        </div>
+    </div>
+
+    <!-- Line -->
+    <div class="vertical"></div>
+    <!-- LINE -->
+
+    <div class="user__settings">
+        <h2 style="margin-bottom: 15px;">User settings</h2>
+        <div class="settings__language basic__info__block">
+            <h3>Language</h3>
+            <h3 id="language">RU</h3>
+        </div>
+
+        <div class="settings__country basic__info__block">
+            <h3>Country</h3>
+            <h3 id="country">Казахстан</h3>
+        </div>
+
+        <div class="settings__btn basic__info__block">
+            <a href="#" id="edit">Edit</a>
+            <a href="#">Change password</a>
+        </div>
+    </div>
+</main>
+
+<form th:action="@{/profile/{id}/edit(id = ${user.getId()})}" method="post" th:object="${user}">
+    <main id="second" style="display: none">
         <div class="basic__info">
-            <h2 style="margin-bottom: 15px;">Basic information</h2>
+            <h2 style="margin-bottom: 15px;">Основная информация</h2>
             <div class="user__name basic__info__block">
-                <h3>First name</h3>
-                <h3 id="firstname" th:text="${user.getName()}">...</h3>
+                <h3>Имя</h3>
+                <input th:value="*{name}" th:field="*{name}" name="name" class="user__input" type="text">
             </div>
 
             <div class="user__name basic__info__block">
-                <h3>Last name</h3>
-                <h3 id="lastname"  th:text="${user.getLastname()}">...</h3>
+                <h3>Фамилия</h3>
+                <input th:value="*{lastname}" th:field="*{lastname}" name="lastname" class="user__input" type="text">
             </div>
 
             <div class="user__name basic__info__block">
-                <h3>Username</h3>
-                <h3 id="username"  th:text="${user.getUsername()}">...</h3>
+                <h3>Имя пользователя</h3>
+                <input th:value="*{username}" th:field="*{username}" name="username" class="user__input" type="text">
             </div>
         </div>
 
@@ -40,23 +83,40 @@
         <!-- LINE -->
 
         <div class="user__settings">
-            <h2 style="margin-bottom: 15px;">User settings</h2>
+            <h2 style="margin-bottom: 15px;">Пользовательские настройки</h2>
             <div class="settings__language basic__info__block">
-                <h3>Language</h3>
-                <h3 id="language">RU</h3>
+                <h3>Язык</h3>
+                <select class="user__select" id="language">
+                    <option value="ru">Русский</option>
+                    <option value="kz">Казахский</option>
+                    <option value="eng">Английский</option>
+                </select>
             </div>
 
             <div class="settings__country basic__info__block">
-                <h3>Country</h3>
-                <h3 id="country">Казахстан</h3>
+                <h3>Страна</h3>
+                <select class="user__select" id="language">
+                    <option value="kazakhstan">Казахстан</option>
+                    <option value="russia">Россия</option>
+                    <option value="kirgizstan">Кыргызстан</option>
+                    <option value="yzbekistan">Узбекистаном</option>
+                    <option value="tyrkmenistan">Туркменистаном</option>
+                    <option value="china">Китай</option>
+                </select>
             </div>
 
             <div class="settings__btn basic__info__block">
-                <a href="#">Edit</a>
-                <a href="#">Change password</a>
+                <input id="save" class="user__submit" type="submit" value="Сохранить">
+
+                <!-- <a href="#">Редактировать</a> -->
+                <a href="#">Изменить пароль</a>
             </div>
         </div>
+
     </main>
+</form>
+
+<script src="/js/current.js"></script>
 </body>
 
 </html>

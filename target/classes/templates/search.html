@@ -62,12 +62,11 @@
 <p class="search__title"><b>Результаты поиска: </b><i th:text="${searchContent}"></i></p>
 <main class="priceList container no__height">
     <div class="priceList__bottom search__content">
-
-
-        <a href="#" th:each="product : ${productsSearch}">
+        <div th:each="product : ${productsSearch}" >
+        <a th:href="@{buy/{id}(id=${product.getId()})}">
             <figure class="priceList__card">
                 <div th:if="${product.getIcoPath}">
-                    <img th:src="@{/img/product/{filename}(filename = ${product.icoPath})}" alt="plant">
+                    <img th:src="@{/pimg/{filename}(filename = ${product.icoPath})}" alt="plant" class="img__bake">
                 </div>
                 <figcaption class="priceList__card__plantName" th:text="${product.getName()}">
                     "Куппер" ОК-15 2.0
@@ -77,7 +76,7 @@
                 </figcaption>
             </figure>
         </a>
-
+    </div>
 
     </div>
     <p class="search__title" th:if="${productsSearch.isEmpty()}">По вашему запросу ничего не найдено</p>
@@ -173,20 +172,17 @@
     </div>
 </div>
 
-
 <footer class="footer">
     <div class="footer__info">
         <div class="footer__address">
             <h2 class="footer__address__mainHeading">
-                plantku
+                данные
             </h2>
             <h3 class="footer__address__heading">
-                Planktu House
+                ИП "Соколов"
             </h3>
             <p class="footer__address__text">
-                Jl. Laksda Adisucipto No.51, Demangan, Kec.
-                Depok, Kota Yogyakarta, Daerah Istimewa
-                Yogyakarta 55282
+                ул. Павлова 107
             </p>
 
         </div>
@@ -194,36 +190,35 @@
         <div class="footer__names__wrapper">
             <div class="footer__names">
                 <h3 class="footer__names__heading">
-                    Perusahaan
+                    Разработчик
                 </h3>
                 <p class="footer__names__text">
-                    Tentang Kami
-                    Hubungi Kami
+                    Табашнюк Евгений
                 </p>
             </div>
             <div class="footer__names">
                 <h3 class="footer__names__heading">
-                    Produk
+                    Контакты
                 </h3>
                 <p class="footer__names__text">
-                    Tanaman
-                    Tanaman Lain
+                    ...
+                    ...
                 </p>
             </div>
         </div>
 
         <form class="footer__form" action="#">
             <label class="footer__form__label" for="mail">
-                Berlangganan Email Kami
+                Во вопросам технической поддержки обраться по адресу zenjaprihan@ynadex.ru
             </label>
-            <input class="footer__form__input" id="mail" type="text" placeholder="Masukan Alamat Email">
-            <input class="footer__form__button" type="submit" value="Submit">
 
         </form>
 
     </div>
 
 </footer>
+
+
 <script src="/js/register__and__login.js"></script>
 </body>
 

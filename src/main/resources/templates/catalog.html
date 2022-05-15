@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="shortcut icon" href="img/favicon.ico"/>
+    <link rel="bookmark" href="img/favicon.ico"/>
+    <link rel="stylesheet" href="/css/media.css">
+    <link rel="stylesheet" href="/css/user.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Nunito:wght@700&family=Poppins:wght@500&family=Source+Sans+Pro:wght@200&family=Work+Sans:wght@400;500&display=swap"
+            rel="stylesheet">
+</head>
+<body>
+<div th:insert="~{search :: Navig}"></div>
+<main class="catalog">
+    <div class="catalog__info">
+        <h1>Добро пожаловать в <b>каталог</b></h1>
+        <h3>Перед вами представлены все котлы для покупки</h3>
+    </div>
+    <div class="catalog__products">
+        <div class="catalog__one__product" th:each="product : ${products}" th:id="${product.getId()}">
+            <img class="img__bake" th:src="@{/pimg/{filename}(filename = ${product.icoPath})}">
+            <div class="catalog__product__info">
+                <h1 th:text="${product.getName()}"></h1>
+                <p th:text="${product.getDescription()}"></p>
+                <a th:href="@{/product/{id}(id = ${product.getId()})}">Узнать подробнее</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="catalog__chouse__popup">
+    <div class="catalog__popup__close__area"></div>
+    <div class="catalog__popup__content">
+        <div class="content__block card">
+            <img src="img/card.svg">
+            <h1>Карта</h1>
+        </div>
+    </div>
+</div>
+
+<script src="js/catalog.js"></script>
+</body>
+</html>

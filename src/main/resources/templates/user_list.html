@@ -65,7 +65,12 @@
         </form>
     </div>
 </main>
-<main id="user__add__admin"></main>
+<main id="user__add__admin">
+    <form method="post" action="/genertion_users" class="form-inner">
+        <h1 th:if="${generationInfo}" th:text="${generationInfo}"></h1>
+        <input class="in__sumbit" type="submit" value="Сгенерировать">
+    </form>
+</main>
 <main id="product__admin">
     <div class="product__list">
         <table>

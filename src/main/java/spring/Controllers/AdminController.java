@@ -1,9 +1,8 @@
 package spring.Controllers;
 
-import netscape.javascript.JSObject;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,18 +12,20 @@ import spring.Models.Role;
 import spring.Models.User;
 import spring.Repos.ProductRepos;
 import spring.Repos.UserRepos;
+import spring.Service.ProductService;
 import spring.Service.UserService;
 
-import javax.swing.plaf.basic.BasicBorders;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class AdminController {
     @Value("${upload.path.product}")
     private String productIconPath;
@@ -33,19 +34,22 @@ public class AdminController {
 
     private final UserService userService;
 
-    @Autowired
-    private ProductRepos productRepos;
+    private final ProductService productService;
 
-    public AdminController(UserRepos userRepos, UserService userService) {
+    private final ProductRepos productRepos;
+
+    public AdminController(UserRepos userRepos, UserService userService, ProductService productService, ProductRepos productRepos) {
         this.userRepos = userRepos;
         this.userService = userService;
+        this.productService = productService;
+        this.productRepos = productRepos;
     }
 
 
     @GetMapping()
     public String adminMain(Model model, Principal principal){
         List<Product> allProducts = productRepos.findAll();
-        List<User> users = userRepos.findAll();
+        List<User> users = userRepos.findAllActiveUsers();
         model.addAttribute("user", new User());
         model.addAttribute("product", new Product());
         model.addAttribute("allProducts", allProducts);
@@ -59,20 +63,22 @@ public class AdminController {
                               Model model){
         Optional<User> user = userRepos.findById(id);
 
-        System.out.println(user.get().getUsername());
         model.addAttribute("user", user.get());
-        return "current_user";
+        model.addAttribute("roles", Role.values());
+        return "admin_current_user";
     }
+
     @GetMapping("product/delete/{id}")
     public String deleteProduct(@PathVariable("id") Long id){
         Optional<Product> product = productRepos.findById(id);
         productRepos.delete(product.get());
         return "redirect:/admin";
     }
+
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") Long id){
-        Optional<User> user = userRepos.findById(id);
-        userRepos.delete(user.get());
+        User user = userRepos.findById(id).orElseThrow();
+        user.setActive(false);
         return "redirect:/admin";
     }
 
@@ -96,5 +102,29 @@ public class AdminController {
         System.out.println(product.getIcoPath());
         System.out.println("PRODUCT ADD");
         return "redirect:/admin";
+    }
+
+    @PostMapping("/{id}/edit")
+    public String adminEditUser(@PathVariable("id") Long id,
+                                @RequestParam Map<String, String> form){
+        User user = userRepos.findById(id).orElseThrow();
+        userService.edit(user, form);
+        return "redirect:/admin/{id}";
+    }
+
+    @GetMapping("/product/{id}")
+    public String currentProduct(@PathVariable Long id,
+            Model model){
+        Product product = productRepos.findById(id).orElseThrow();
+        model.addAttribute("product", product);
+        return "current_product";
+    }
+
+    @PostMapping("/product/{id}/edit")
+    public String editProduct(@PathVariable Long id,
+                              @RequestParam Map<String, String> form,
+                              @RequestParam("icoPath") MultipartFile file) throws IOException {
+        productService.edit(productRepos.findById(id).orElseThrow(), form, file);
+        return "redirect:/admin/product/{id}";
     }
 }

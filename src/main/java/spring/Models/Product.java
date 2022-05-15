@@ -1,11 +1,13 @@
 package spring.Models;
 
 
+import org.aspectj.weaver.ast.Or;
 import org.javamoney.moneta.Money;
 
 import javax.money.Monetary;
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "products")

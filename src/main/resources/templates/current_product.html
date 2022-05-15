@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Котлы</title>
+    <link rel="stylesheet" href="/css/show_user.css"/>
+</head>
+<body>
+<a href="javascript:history.back()" class="back__link">Назад</a>
+<form enctype="multipart/form-data" th:action="@{/admin/product/{id}/edit(id = ${product.getId()})}" method="post" th:object="${product}">
+    <main class="main info">
+        <div class="image basic__info">
+            <img
+                    th:src="@{/pimg/{filename}(filename = ${product.icoPath})}"
+                    alt=""
+            />
+            <div class="chouse">
+                <label for="myfile" class="chous">Изображение печи</label>
+                <input
+                        type="file"
+                        accept="image/png, image/jpeg"
+                        class="my"
+                        id="myfile"
+                        name="icoPath"
+                />
+            </div>
+        </div>
+        <!-- Line -->
+        <div class="vertical no_transform"></div>
+        <!-- LINE -->
+        <div class="user__settings">
+            <div class="block">
+                <label for="name">Название</label>
+                <input class="user__input" type="text" id="name" th:value="*{name}" name="name"/>
+            </div>
+            <div class="block">
+                <label for="price">Цена</label>
+                <input class="user__input" type="text" id="price" th:value="*{priceValue}" name="priceValue"/>
+            </div>
+            <div class="block">
+                <label for="des">Описание</label>
+                <textarea class="user__input" id="des" name="des" th:text="${product.getDescription()}"></textarea>
+            </div>
+            <input
+                    style="margin-top: 40px"
+                    type="submit"
+                    value="Сохранить"
+                    class="user__submit"
+            />
+        </div>
+    </main>
+</form>
+<script src="/js/jquery-3.6.0.min.js"></script>
+<script>
+    $(".my").change(function (e) {
+        var fileName = e.target.files[0].name;
+        if ($(this).val() != "")
+            $(this)
+                .prev()
+                .text("Выбран файл: " + fileName);
+        else $(this).prev().text("Выберите файл");
+    });
+</script>
+</body>
+</html>

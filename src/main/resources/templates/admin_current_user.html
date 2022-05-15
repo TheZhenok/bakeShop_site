@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User</title>
+    <link rel="stylesheet" href="/css/show_user.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<header class="header">
+    <div class="header__avatar"></div>
+</header>
+<main id="first">
+    <div class="basic__info">
+        <h2 style="margin-bottom: 15px;">Basic information</h2>
+        <div class="user__name basic__info__block">
+            <h3>Имя</h3>
+            <h3 id="firstname" th:text="${user.getName()}">...</h3>
+        </div>
+
+        <div class="user__name basic__info__block">
+            <h3>Фамилия</h3>
+            <h3 id="lastname" th:text="${user.getLastname()}">...</h3>
+        </div>
+
+        <div class="user__name basic__info__block">
+            <h3>Имя пользователя</h3>
+            <h3 id="username" th:text="${user.getUsername()}">...</h3>
+        </div>
+    </div>
+
+    <!-- Line -->
+    <div class="vertical"></div>
+    <!-- LINE -->
+
+    <div class="user__settings">
+        <h2 style="margin-bottom: 15px;">User settings</h2>
+        <div class="settings__language basic__info__block">
+            <h3>Role</h3>
+            <h3 id="language" th:text="${user.getRoles()}"></h3>
+        </div>
+
+        <div class="settings__country basic__info__block">
+            <h3>Country</h3>
+            <h3 id="country">Казахстан</h3>
+        </div>
+
+        <div class="settings__btn basic__info__block">
+            <a href="#" id="edit">Edit</a>
+            <a href="#">Change password</a>
+        </div>
+    </div>
+</main>
+
+<form th:action="@{/admin/{id}/edit(id = ${user.getId()})}" method="post" th:object="${user}">
+    <main id="second" style="display: none">
+        <div class="basic__info">
+            <h2 style="margin-bottom: 15px;">Основная информация</h2>
+            <div class="user__name basic__info__block">
+                <h3>Имя</h3>
+                <input th:value="*{name}" th:field="*{name}" name="name" class="user__input" type="text">
+            </div>
+
+            <div class="user__name basic__info__block">
+                <h3>Фамилия</h3>
+                <input th:value="*{lastname}" th:field="*{lastname}" name="lastname" class="user__input" type="text">
+            </div>
+
+            <div class="user__name basic__info__block">
+                <h3>Имя пользователя</h3>
+                <input th:value="*{username}" th:field="*{username}" name="username" class="user__input" type="text">
+            </div>
+        </div>
+
+        <!-- Line -->
+        <div class="vertical"></div>
+        <!-- LINE -->
+
+        <div class="user__settings">
+            <h2 style="margin-bottom: 15px;">Пользовательские настройки</h2>
+            <div class="settings__language basic__info__block">
+                <h3>Роли</h3>
+                <div th:each="role : ${roles}" class="" id="role">
+                    <label th:for="${role}" th:text="${role}"></label>
+                    <input type="checkbox" th:checked="${user.roles.contains(role)}" th:id="${role}" th:name="${role}">
+                </div>
+            </div>
+
+            <div class="settings__country basic__info__block">
+                <h3>Страна</h3>
+                <select class="user__select" id="language">
+                    <option value="kazakhstan">Казахстан</option>
+                    <option value="russia">Россия</option>
+                    <option value="kirgizstan">Кыргызстан</option>
+                    <option value="yzbekistan">Узбекистаном</option>
+                    <option value="tyrkmenistan">Туркменистаном</option>
+                    <option value="china">Китай</option>
+                </select>
+            </div>
+
+            <div class="settings__btn basic__info__block">
+                <input id="save" class="user__submit" type="submit" value="Сохранить">
+
+                <!-- <a href="#">Редактировать</a> -->
+                <a href="#">Изменить пароль</a>
+            </div>
+        </div>
+
+    </main>
+</form>
+
+<script src="/js/current.js"></script>
+</body>
+
+</html>

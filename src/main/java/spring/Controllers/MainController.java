@@ -1,12 +1,14 @@
 package spring.Controllers;
 
 import com.github.javafaker.Faker;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 import spring.Models.Product;
 import spring.Models.Role;
 import spring.Models.User;
@@ -16,13 +18,21 @@ import spring.Service.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 @Controller
 public class MainController {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    @Value("${stripe.key.public}")
+    private String API_PUBLIC_KEY;
+
+    private final PasswordEncoder passwordEncoder;
+
+    @Value("${spring.datasource.password}")
+    private String passwordSuperUser;
 
     private final UserService userService;
 
@@ -30,10 +40,14 @@ public class MainController {
 
     private final ProductRepos productRepos;
 
-    public MainController(UserService userService, UserRepos userRepos, ProductRepos productRepos) {
+    public MainController(UserService userService,
+                          UserRepos userRepos,
+                          ProductRepos productRepos,
+                          PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.userRepos = userRepos;
         this.productRepos = productRepos;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping()
@@ -71,14 +85,17 @@ public class MainController {
     }
 
 
-    @GetMapping("/genertion_users")
-    public String generationUsers(){
+    @PostMapping("/genertion_users")
+    public RedirectView generationUsers(Model model, RedirectAttributes redir){
         final int MAX_GENERATION_VALUE = 100;
-        Faker faker = new Faker();
-        User user = new User();
+        Faker faker;
+        User user;
         List<User> users = userRepos.findAll();
+        RedirectView redirectView = new RedirectView("/admin", true);
+        redir.addFlashAttribute("generationInfo","Полное количество пользователей");
         if(users.size() > MAX_GENERATION_VALUE){
-            return "Users is full";
+            redir.addFlashAttribute("generationInfo","Полное количество пользователей");
+            return redirectView;
         }
 
         for (int i = 0; i < MAX_GENERATION_VALUE; i++) {
@@ -95,7 +112,8 @@ public class MainController {
             user.setRoles(Collections.singleton(Role.USER));
             userRepos.save(user);
         }
-        return "Generation is successful";
+        redir.addFlashAttribute("generationInfo","Генерация прошла успено!");
+        return redirectView;
     }
     @GetMapping("/search")
     public String searchGetProduct(Model model){
@@ -108,16 +126,9 @@ public class MainController {
     public String searchProduct(
             @RequestParam("searchContent") String searchContent,
             Map<String, Object> model){
-        List<Product> products = new ArrayList<Product>();
-        System.out.println(searchContent);
-        model.put("user", new User());
-        for (Product product : productRepos.findAll()) {
-            if(product.getName().contains(searchContent)){
-                products.add(product);
-                System.out.println(product.getIcoPath());
-            }
-        }
+        List<Product> products = userService.search(searchContent);
         model.put("productsSearch", products);
+        model.put("user", new User());
         model.put("searchContent", searchContent);
         return "search";
     }
@@ -126,8 +137,47 @@ public class MainController {
     public String profile(Principal principal, Model model){
         User user = userRepos.findByUsername(principal.getName());
         model.addAttribute("user", user);
+        model.addAttribute("userEditor", new User());
         return "current_user";
     }
 
+    @PostMapping("/profile/{id}/edit")
+    public String editUser(@PathVariable("id") Long id,
+                           @RequestParam Map<String, String> form){
+        User user = userRepos.findById(id).orElseThrow();
+        userService.edit(user, form);
+        return "redirect:/profile";
+    }
+
+    @GetMapping("/catalog")
+    public String catalog(Model model){
+        model.addAttribute("products", productRepos.findAll());
+        return "catalog";
+    }
+
+
+    @GetMapping("/create_super_user")
+    public String createSuperUser(){
+        User user = new User();
+        if(userRepos.findByUsername("TheZhenok") != null){
+            return "error";
+        }
+        user.setFathername("Витальевич");
+        user.setUsername("TheZhenok");
+        user.setName("Евгений");
+        user.setLastname("Табашнюк");
+        user.setPassword(passwordEncoder.encode(passwordSuperUser));
+        user.setActive(true);
+        user.setRoles(Collections.singleton(Role.ADMIN));
+        userRepos.save(user);
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/subscription")
+    public String subscriptionPage(Model model) {
+        model.addAttribute("stripePublicKey", API_PUBLIC_KEY);
+        return "pay/subscription";
+    }
 
 }

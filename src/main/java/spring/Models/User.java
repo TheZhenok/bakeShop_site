@@ -1,5 +1,6 @@
 package spring.Models;
 
+import org.aspectj.weaver.ast.Or;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -7,32 +8,28 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotBlank(message = "*Введите имя")
     @Size(min = 2, max = 20, message = "*Имя слишком мало или велико")
     private String name;
 
-    @NotBlank(message = "*Введите фамилию")
     @Size(min = 2, max = 20, message = "*Фамилия слишком мала или велика")
     private String lastname;
 
-    @NotBlank(message = "*Введите отчество")
     @Size(min = 0, max = 20, message = "*Отчество слишком велико")
     private String fathername;
 
-    @NotBlank(message = "*Введите логин")
     @Size(min = 5, message = "*Логин слишком мал")
     private String username;
 
-    @NotBlank(message = "*Введите пароль")
     @Size(min = 4, message = "*Пароль должен состоять из 6 или более символов")
     private String password;
     private String repeatPassword;
@@ -40,6 +37,8 @@ public class User implements UserDetails {
     private boolean active;
     private String avatar;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Buyer> buyers;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
@@ -183,5 +182,15 @@ public class User implements UserDetails {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public boolean check(){
+
+        if( (this.name.length() < 3 && this.name != null)
+                || (this.lastname.length() < 3 && this.lastname != null)
+                || (this.username.length() < 3 && this.username != null)){
+            return false;
+        }
+        return true;
     }
 }
